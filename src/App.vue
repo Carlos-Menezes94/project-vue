@@ -1,44 +1,63 @@
 <template>
-
-
-<div class="corpo">
+  <div class="corpo">
 
     <h1 class="centralizado">{{ titulo }}</h1>
 
-    <ul class="lista-fotos">
-      <li class="lista-fotos-item" v-for="foto in fotos" :key="foto.titulo">
+        <ul class="lista-fotos">
 
-        <div class="painel">
-          <h2 class="painel-titulo">{{foto.titulo}}</h2>
-          <div class="painel-corpo">
+        <input class="filtro" v-on:input="filtro = $event.target.value" placeholder="Pesquise a foto/imagem">
+        <li class="lista-fotos-item" v-for="foto in fotosFiltro" :key="foto.titulo">
 
+            <meu-painel :titulo="foto.titulo">
             <img class="imagem-responsiva" :src="foto.url" :alt="foto.titulo">
+            </meu-painel>
 
-          </div>
-        </div>
+        </li>
+        </ul>
 
-      </li>
-    </ul>
-</div>
-
+  </div>
 </template>
 
 <script>
+
+// importando nosso Painel 
+
+import Painel from './components/shared/painel/Painel.vue';
+
 export default {
 
-    data() {
+    components: {
+
+        'meu-painel': Painel
+    },
+
+    data () {
         return {
-            titulo: 'Arrombadineos',
-            fotos: []
+
+        titulo: 'IMG IMG', 
+        fotos: [],
+        filtro: ''
         }
-    }, 
+    },
         
-created() {
-    this.$http.get('http://localhost:3000/v1/fotos')
-        .then(res=> res.json())
+    computed:{
+        fotosFiltro(){
+            if(this.filtro){
+                let exp = new RegExp(this.filtro.trim(), 'i');
+                return this.fotos.filter(foto => exp.test(foto.titulo));
+            }else{
+                return this.fotos;
+            }
+        }
+    },
+
+    created() {
+
+        this.$http
+        .get('http://localhost:3000/v1/fotos')
+        .then(res => res.json())
         .then(fotos => this.fotos = fotos, err => console.log(err));
     }
-
 }
 </script>
 
@@ -53,11 +72,9 @@ created() {
     text-align: center;
 }
 
-
 .lista-fotos {
     list-style: none;
 }
-
 
 .lista-fotos .lista-fotos-item {
     display: inline-block;
@@ -67,25 +84,10 @@ created() {
     width: 100%;
 }
 
-.painel {
-    padding:  0 auto;
-    border: solid 2px grey;
-    margin: 5px;
-    display: inline-block;
-    box-shadow:  5px 5px 10px grey;
-    width: 200px;
-    height: 100%;
-    vertical-align: top;
-    text-align: center;
+.filtro {
+    display: block;
+    width: 100%;
 }
 
-.painel .painel-titulo {
-    text-align: center;
-    border: solid 2px;
-    background: rgb(173, 177, 230);
-    margin: 0 0 15px 0;
-    padding: 10px;
-    text-transform: uppercase;
-}
 
 </style>
