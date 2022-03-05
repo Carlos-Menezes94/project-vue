@@ -1,34 +1,27 @@
 <template>
   <div class="corpo">
-
     <h1 class="centralizado">{{ titulo }}</h1>
-    
+    <input class="filtro" @input="filtro = $event.target.value" placeholder="Pesquise a foto/imagem">
         <ul class="lista-fotos">
-
-        <input class="filtro" @input="filtro = $event.target.value" placeholder="Pesquise a foto/imagem">
-        <li class="lista-fotos-item" v-for="foto in fotosFiltro" :key="foto.titulo">
-
-            <meu-painel :titulo="foto.titulo">
-            <img class="imagem-responsiva" :src="foto.url" :alt="foto.titulo">
-            </meu-painel>
-
-        </li>
+            <li class="lista-fotos-item" v-for="foto in fotosFiltro" :key="foto.titulo">
+                <meu-painel :titulo="foto.titulo">
+                    <imagem-responsiva :src="foto.url" :alt="foto.titulo" />
+                </meu-painel>
+            </li>
         </ul>
-
   </div>
 </template>
 
 <script>
-
-// importando nosso Painel 
-
+import ImagemResonsiva from './components/shared/painel/imagem-responsiva/ImagemResonsiva.vue';
 import Painel from './components/shared/painel/Painel.vue';
 
 export default {
 
     components: {
 
-        'meu-painel': Painel
+        'meu-painel': Painel,
+        'imagem-responsiva': ImagemResonsiva
     },
 
     data () {
@@ -78,10 +71,6 @@ export default {
 
 .lista-fotos .lista-fotos-item {
     display: inline-block;
-}
-
-.imagem-responsiva {
-    width: 100%;
 }
 
 .filtro {
