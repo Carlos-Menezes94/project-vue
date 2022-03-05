@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ImagemResonsiva from '../shared/painel/imagem-responsiva/ImagemResonsiva.vue';
+import ImagemResonsiva from '../shared/imagem-responsiva/ImagemResonsiva.vue';
 import Painel from '../shared/painel/Painel.vue';
 
 export default {
